@@ -1,0 +1,40 @@
+
+#!/usr/bin/env python
+import os
+import sys
+from operator import eq
+from socket import *
+import thread
+import copy
+
+port = 11111
+host = '210.115.226.109'
+dataSave = ''
+
+def serv((c,addr)):
+        global dataSave
+        print('conndection : {}{}'.format(c,addr[0]))
+        users.append(c)
+        str1 = '[' + addr[0] +'has entered]'
+        data = c.recv(1024)
+        dataName = data.split(':')
+        if eq(dataName[0], 'pi'):
+                print(dataName)
+                dataSave = dataName[1]+'\n'
+        while c.recv(1024):
+                if eq(dataName[0], 'and'):
+                        for i in users:
+                                if i == c:
+                                        print 'i == c : ', dataSave
+                                        i.send(dataSave)
+
+global users
+s = socket(AF_INET, SOCK_STREAM)
+s.bind((host,port))
+s.listen(5)
+users=[]
+
+while 1:
+    print('ready server')
+    thread.start_new_thread(serv, (s.accept(),))
+
